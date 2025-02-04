@@ -2,62 +2,9 @@
 ### Trabajo Práctico
 # Sistema de Turnos Web de Atención Ambulatoria
 
-> Este laboratorio está diseñado para desarrollarse sobre sistemas **Linux**. Es recomendable que los estudiantes se familiaricen con este entorno para cumplir con los requisitos de la asignatura.
->
-> Opciones para quienes no cuenten con Linux en sus equipos:
-> 1. (Recomendada) Instalar cualquier distribución Linux en modo dual-boot.
-> 2. Utilizar una máquina virtual con Linux.
-
-> En la raíz de este directorio encontrarás el script `labprog` para facilitar la ejecución de comandos. En el presente instructivo se indicará en cada paso si corresponde utilizar este script.
-
-## Setup
-1. Instalar `Git`
-2. Instalar `Docker` y `Docker Compose`
-3. Iniciar servicio docker `sudo systemctl start docker`
-    > Este comando puede variar según la distro de Linux utilizada.
-4. Clonar este repositorio con sus submódulos `git clone --recursive <repo_url>`
-5. Ir al directorio clonado `cd <repo_dir>`
-6. Instalar las dependencias del cliente `docker-compose -f base/docker-compose.yml --project-directory . run client ./install.sh` o `./labprog install`
-
-### Levantar los servicios
-Desde la carpeta raíz:
-
-```docker-compose -f base/docker-compose.yml --project-directory . up -d```
-
-o
-
-```./labprog up```
-
-Para verificar su funcionamiento, ingresar a `http://localhost:8080` para ver la página de bienvenida del servidor, y acceder a `http://localhost:4200` para ver la aplicación.
-
-### Conectarse al servidor
-
-Para acceder al servidor **back-end**, ejecutar:
-
-```docker exec -it turnero-server bash```
-
-o
-
-```./labprog bash server```
-
-### Conectarse al cliente
-Para conectarse al servidor **front-end** de Angular, ejecutar:
-
-```docker exec -it turnero-client bash```
-
-o
-
-```./labprog bash client```
-
-### Detener los servicios
-
-Para detener los servicios configurados en Docker Compose:
-
-```docker-compose -f base/docker-compose.yml --project-directory . down```
-
-o
-
-```./labprog down```
+Para la instalación y configuración del entorno de desarrollo es necesario seguir el siguiente 
+<a href="https://git.fi.mdn.unp.edu.ar/labprog/talleres/taller-restful-uix" 
+target="_blank">INSTRUCTIVO</a>
 
 ---
 
