@@ -175,3 +175,6 @@ Para la aprobación del trabajo, se evaluarán los siguientes aspectos:
 3. Ejecutar `mvn clean install`.
 4. Desplegar la aplicación en el servidor configurado.
 
+![](diagrama.png)
+
+
