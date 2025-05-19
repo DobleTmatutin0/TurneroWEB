@@ -59,9 +59,9 @@ class StaffMedico {
 }
 }
 
-CentroAtencion "1" -- "0..*" StaffMedico : tiene
-Medico "1" -- "0..*" StaffMedico : pertenece a
-StaffMedico "1" -- "0..*" DisponibilidadMedico : tiene
+CentroAtencion "1" --> "*" StaffMedico : tiene
+Medico "1" <-- "*" StaffMedico : pertenece a
+StaffMedico "1" --> "*" DisponibilidadMedico : tiene
 
 package "Obra Social" {
   class ObraSocial {
@@ -94,17 +94,15 @@ package "Turno" {
       - intervalo: Integer
     }
 
-  Turno -- "1" Paciente
-  Turno -- "1" Medico
-  Turno -- "1" Consultorio
-  Consultorio "1" -- "*" EsquemaTurno
+  Turno "*" --> "1" Paciente
+  Turno "*" --> "1" Medico
+  Turno "*" --> "1" Consultorio
+  CentroAtencion "1" --> "*" EsquemaTurno
+  EsquemaTurno "*" --> "1" StaffMedico
+  EsquemaTurno "*" --> "1" Consultorio
 }
 
-Medico "1" -- "*" Turno
-Paciente "1" -- "1" ObraSocial
-
-' Nueva relación: Staff Médico
-Medico "*" -- "*" CentroAtencion : Staff
+Paciente "1" --> "1" ObraSocial
 Medico "*" --> "1" Especialidad
 
 @enduml
