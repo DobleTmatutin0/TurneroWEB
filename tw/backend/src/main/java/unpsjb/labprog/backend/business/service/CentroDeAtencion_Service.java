@@ -19,10 +19,18 @@ public class CentroDeAtencion_Service {
     @Transactional
     public CentroDeAtencion save(CentroDeAtencion_DTO aCentroDeAtencion) {
 
-        Point point = new Point(
-            aCentroDeAtencion.getCoordenadas().getLatitud(),
-            aCentroDeAtencion.getCoordenadas().getLongitud()
-        );
+        double latitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLatitud());
+        double longitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLongitud());
+
+        if (latitud < -90 || latitud > 90) {
+            throw new RuntimeException("Latitud inválida (rango: -90 <= latitud <= 90)");
+        }
+
+        if (longitud < -180 || longitud > 180) {
+            throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
+        }
+
+        Point point = new Point(latitud, longitud);
 
         CentroDeAtencion CentroDeAtencionToSave = new CentroDeAtencion();
         CentroDeAtencionToSave.setNombre(aCentroDeAtencion.getNombre());
