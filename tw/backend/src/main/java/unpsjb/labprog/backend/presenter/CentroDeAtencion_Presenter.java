@@ -29,7 +29,12 @@ public class CentroDeAtencion_Presenter {
             return Response.badRequest("La dirección es requerida");
         }
 
-        if (aCentroDeAtencion.getCoordenadas() == null || aCentroDeAtencion.getCoordenadas().getClass() != Double.class) {
+        if (
+        aCentroDeAtencion.getCoordenadas() == null ||
+        aCentroDeAtencion.getCoordenadas().getLatitud() == null ||
+        aCentroDeAtencion.getCoordenadas().getLongitud() == null  ||
+        !esNumeroValido(aCentroDeAtencion.getCoordenadas().getLatitud()) ||
+        !esNumeroValido(aCentroDeAtencion.getCoordenadas().getLongitud())) {
             return Response.badRequest("Las coordenadas son inválidas");
         }
 
@@ -41,10 +46,21 @@ public class CentroDeAtencion_Presenter {
             return Response.badRequest("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
         }
         
-        return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");            
+        try {
+            return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");
+        } catch (Exception e) {
+            return Response.badRequest(e.getMessage());
+        }
                 
     }
 
-    
+    private boolean esNumeroValido(String valor) {
+    try {
+        Double.parseDouble(valor);
+        return true;
+    } catch (NumberFormatException e) {
+        return false;
+    }
+}
 
 }
