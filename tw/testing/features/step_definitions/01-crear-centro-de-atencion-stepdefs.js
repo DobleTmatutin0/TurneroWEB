@@ -9,7 +9,7 @@ Given(
         this.sistema = {
             centros: []
         }
-        // return 'pending';
+        
     }
 );
 
@@ -23,8 +23,8 @@ When(
             "localidad": localidad,
             "provincia": provincia,
             "coordenadas": {
-                "latitud": parseFloat(coordenadas.split(',')[0].trim()),
-                "longitud": parseFloat(coordenadas.split(',')[1].trim())
+                "latitud": coordenadas.split(',')[0].trim(),
+                "longitud": coordenadas.split(',')[1].trim()
             }
         };
 
@@ -38,7 +38,7 @@ When(
         
         this.response = JSON.parse(this.backendResponse.getBody('utf8'));
         console.log(this.response);
-        // return 'pending';
+
     }
 );
 
@@ -52,6 +52,5 @@ Then(
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage)
         
-        // return 'pending';
     }
 );
