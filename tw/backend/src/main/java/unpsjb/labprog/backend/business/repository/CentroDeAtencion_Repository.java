@@ -11,6 +11,13 @@ import unpsjb.labprog.backend.model.CentroDeAtencion;
 public interface CentroDeAtencion_Repository extends JpaRepository<CentroDeAtencion, Integer> {
     // all default methods
 
-    @Query("SELECT COUNT(ca) > 0 FROM CentroDeAtencion ca WHERE LOWER(ca.nombre) = LOWER(?1)")
-    public boolean existsByName(String aName);
+    @Query(
+        "SELECT COUNT(ca) > 0 " +
+        "FROM CentroDeAtencion ca " +
+        "WHERE " +
+            "LOWER(ca.nombre) = LOWER(?1) " +
+            "AND " +
+            "LOWER(ca.direccion) = LOWER(?2)"
+    )
+    public boolean existsByNameAndAddress(String aName, String anAddress);
 }
