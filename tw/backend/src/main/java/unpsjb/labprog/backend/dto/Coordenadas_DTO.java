@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class Coordenadas_DTO {
     
-    private double latitud;
-    private double longitud;
+    private String latitud;
+    private String longitud;
 
 }
