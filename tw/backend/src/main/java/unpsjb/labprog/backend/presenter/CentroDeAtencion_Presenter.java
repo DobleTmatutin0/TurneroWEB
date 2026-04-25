@@ -3,12 +3,12 @@ package unpsjb.labprog.backend.presenter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.business.service.CentroDeAtencion_Service;
+import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.Response;
 
 @Controller
@@ -20,15 +20,29 @@ public class CentroDeAtencion_Presenter {
     private CentroDeAtencion_Service centroDeAtencion_Svc;
 
     @PostMapping("")
-    public ResponseEntity<Object> agregarConsultorio(CentroDeAtencion aCentroDeAtencion) {
-        if (centroDeAtencion_Svc.findByName(aCentroDeAtencion.getNombre())) {
-            return Response.error("Ya existe un centro de atención con ese nombre y dirección");
+    public ResponseEntity<Object> agregarConsultorio(@RequestBody CentroDeAtencion_DTO aCentroDeAtencion) {
+        if (aCentroDeAtencion.getNombre() == null || aCentroDeAtencion.getNombre().trim().isEmpty()) {
+            return Response.badRequest("El nombre es requerido");
         }
 
-        if (aCentroDeAtencion.getId() != 0) {
-            return Response.error("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
+        if (aCentroDeAtencion.getDireccion() == null || aCentroDeAtencion.getDireccion().trim().isEmpty()) {
+            return Response.badRequest("La dirección es requerida");
         }
-        return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");
+
+        if (aCentroDeAtencion.getCoordenadas() == null || aCentroDeAtencion.getCoordenadas().getClass() != Double.class) {
+            return Response.badRequest("Las coordenadas son inválidas");
+        }
+
+        if (this.centroDeAtencion_Svc.findByNameAndAddress(aCentroDeAtencion.getNombre(), aCentroDeAtencion.getDireccion())) {
+            return Response.conflict("Ya existe un centro de atención con ese nombre y dirección");        
+        }
+        
+        if (aCentroDeAtencion.getId() != 0) {
+            return Response.badRequest("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
+        }
+        
+        return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");            
+                
     }
 
     
