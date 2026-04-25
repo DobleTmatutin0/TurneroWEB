@@ -34,12 +34,19 @@ public class Response {
         return response(HttpStatus.NOT_FOUND, msj, null);
     }
 
-    public static ResponseEntity<Object> error(Object responseObj, String msj) {
+    public static ResponseEntity<Object> badRequest(Object responseObj, String msj) {
 		return response(HttpStatus.BAD_REQUEST, msj, responseObj);
 	}
 
-    public static ResponseEntity<Object> error(String msj) {
+    public static ResponseEntity<Object> badRequest(String msj) {
 		return response(HttpStatus.BAD_REQUEST, msj, null);
 	}
 
+    public static ResponseEntity<Object> conflict(Object responseObj, String msj) {
+		return response(HttpStatus.CONFLICT, msj, responseObj);
+	}
+
+    public static ResponseEntity<Object> conflict(String msj) {
+		return response(HttpStatus.CONFLICT, msj, null);
+	}
 }
