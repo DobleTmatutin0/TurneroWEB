@@ -20,4 +20,12 @@ public interface CentroDeAtencion_Repository extends JpaRepository<CentroDeAtenc
             "LOWER(ca.direccion) = LOWER(?2)"
     )
     public boolean existsByNameAndAddress(String aName, String anAddress);
+
+    @Query(
+        "SELECT COUNT(ca) > 0 " +
+        "FROM CentroDeAtencion ca " +
+        "WHERE " +
+            "LOWER(ca.direccion) = LOWER(?1)"
+    )
+    public boolean existsByAddress(String anAddress);
 }
