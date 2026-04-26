@@ -37,7 +37,6 @@ When(
         );
         
         this.response = JSON.parse(this.backendResponse.getBody('utf8'));
-        // console.log(this.response);
 
     }
 );
