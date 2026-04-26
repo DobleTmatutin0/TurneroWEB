@@ -46,6 +46,8 @@ public class CentroDeAtencion_Service {
         return centroDeAtencion_Repo.existsByNameAndAddress(aName, anAddress);
     }
 
-    
+    public boolean findByAddress(String anAddress) {
+        return centroDeAtencion_Repo.existsByAddress(anAddress);
+    }
 
 }
