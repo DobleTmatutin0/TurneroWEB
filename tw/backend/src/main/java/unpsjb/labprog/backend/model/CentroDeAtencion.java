@@ -41,12 +41,12 @@ public class CentroDeAtencion {
     @NotNull(message = "La dirección es requerida")
     private String direccion;
 
+    // habria q hacer unique  la triada nombre localidad direccion 
     private String localidad;
 
     @Column(unique = true)
     private String telefono;
 
-    // Buscar como validar coordenadas.
     private Point coordenadas;
 
 }
