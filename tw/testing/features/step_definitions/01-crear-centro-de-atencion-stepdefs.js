@@ -30,14 +30,14 @@ When(
 
         this.backendResponse = request(
             'POST',
-            'http://tw-backend:8080/centros-de-atencion',
+            'http://backend:8080/centros-de-atencion',
             {
                 json: this.aNewCentroDeAtencion
             }
         );
         
         this.response = JSON.parse(this.backendResponse.getBody('utf8'));
-        console.log(this.response);
+        // console.log(this.response);
 
     }
 );
@@ -45,10 +45,7 @@ When(
 Then(
     'el sistema responde con {int} y {string}',
     function(expectedStatus, expectedMessage) {
-        
-        
-        
-
+    
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage)
         
