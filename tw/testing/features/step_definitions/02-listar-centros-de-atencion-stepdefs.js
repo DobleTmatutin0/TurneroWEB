@@ -1,4 +1,4 @@
-const { Given, When, Then, And } = require('@cucumber/cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 const request = require('sync-request');
 
@@ -12,7 +12,7 @@ Given(
     }
 );
 
-And(
+Given(
     'los siguientes centros de atención han sido registrados:',
     function(dataTable) {
         dataTable.hashes().forEach(dataTableElement => {
@@ -59,7 +59,7 @@ Then(
     }
 );
 
-And(
+Then(
     'la lista contiene los siguientes centros de atención:',
     function(dataTable) {
         const expected = dataTable.hashes();
