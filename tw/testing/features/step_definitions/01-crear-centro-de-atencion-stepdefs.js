@@ -44,9 +44,8 @@ When(
 Then(
     'el sistema responde con {int} y {string}',
     function(expectedStatus, expectedMessage) {
-    
         assert.strictEqual(this.response.status, expectedStatus);
-        assert.strictEqual(this.response.message, expectedMessage)
+        assert.strictEqual(this.response.message, expectedMessage);
         
     }
 );
