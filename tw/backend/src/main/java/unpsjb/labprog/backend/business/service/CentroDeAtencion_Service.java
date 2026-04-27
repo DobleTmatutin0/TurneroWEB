@@ -50,4 +50,8 @@ public class CentroDeAtencion_Service {
         return centroDeAtencion_Repo.existsByAddress(anAddress);
     }
 
+    public void deleteAll() {
+        centroDeAtencion_Repo.deleteAll();
+    }
+
 }

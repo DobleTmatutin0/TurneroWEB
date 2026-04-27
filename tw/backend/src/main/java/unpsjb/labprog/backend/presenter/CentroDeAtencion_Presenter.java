@@ -2,6 +2,7 @@ package unpsjb.labprog.backend.presenter;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,19 @@ public class CentroDeAtencion_Presenter {
                 
     }
 
-    private boolean esNumeroValido(String valor) {
-    try {
-        Double.parseDouble(valor);
-        return true;
-    } catch (NumberFormatException e) {
-        return false;
+
+    @DeleteMapping("/test/delete-all")
+    public void deleteAll() {
+        centroDeAtencion_Svc.deleteAll();
     }
-}
+
+    private boolean esNumeroValido(String valor) {
+        try {
+            Double.parseDouble(valor);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
 }
