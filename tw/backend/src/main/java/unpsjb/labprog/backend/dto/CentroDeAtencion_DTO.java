@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 public class CentroDeAtencion_DTO {
     
-    private int id;    
     private String nombre;
     private String direccion;
     private String localidad;
