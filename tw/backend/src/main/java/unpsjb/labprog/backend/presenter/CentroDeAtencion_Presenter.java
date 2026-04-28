@@ -3,6 +3,7 @@ package unpsjb.labprog.backend.presenter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,13 @@ public class CentroDeAtencion_Presenter {
     @Autowired
     private CentroDeAtencion_Service centroDeAtencion_Svc;
 
+    @GetMapping("")
+    public ResponseEntity<Object> findAll() {
+        return Response.ok(centroDeAtencion_Svc.findAll());
+    }
+    
     @PostMapping("")
-    public ResponseEntity<Object> agregarConsultorio(@RequestBody CentroDeAtencion_DTO aCentroDeAtencion) {
+    public ResponseEntity<Object> create(@RequestBody CentroDeAtencion_DTO aCentroDeAtencion) {
         if (aCentroDeAtencion.getNombre() == null || aCentroDeAtencion.getNombre().trim().isEmpty()) {
             return Response.badRequest("El nombre es requerido");
         }
