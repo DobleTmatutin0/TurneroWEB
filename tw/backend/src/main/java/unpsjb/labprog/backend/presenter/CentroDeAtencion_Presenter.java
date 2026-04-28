@@ -53,9 +53,9 @@ public class CentroDeAtencion_Presenter {
             return Response.conflict("Ya existe un centro de atención con esa dirección");
         }
         
-        if (aCentroDeAtencion.getId() != 0) {
-            return Response.badRequest("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
-        }
+        // if (aCentroDeAtencion.getId() != 0) {
+        //     return Response.badRequest("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
+        // }
         
         try {
             return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");
