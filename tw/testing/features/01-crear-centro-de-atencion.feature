@@ -34,7 +34,8 @@ Esquema del escenario: Crear un centro de atención con conflictos
 
 
 # Historia de usuario:
-#     Como Administrador del sistema, quiero crear un nuevo centro de atención
+#     Como Administrador del sistema,
+#     quiero crear un nuevo centro de atención
 #     para ampliar la cobertura de atención médica a nuevas zonas y asi los usuarios
 #     y pacientes puedan asignar turnos en ese lugar.
 # Criterios de Aceptación:    
