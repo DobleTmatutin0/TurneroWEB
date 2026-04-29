@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CentroDeAtencion_DTO {
-    
+
+    private Integer id;
     private String nombre;
     private String direccion;
     private String localidad;
