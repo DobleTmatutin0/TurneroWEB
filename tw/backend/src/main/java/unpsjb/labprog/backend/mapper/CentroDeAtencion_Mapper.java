@@ -8,6 +8,7 @@ public class CentroDeAtencion_Mapper {
     public static CentroDeAtencion_DTO toDTO(CentroDeAtencion aCentroDeAtencion) {
         CentroDeAtencion_DTO result = new CentroDeAtencion_DTO();
 
+        result.setId(aCentroDeAtencion.getId());
         result.setNombre(aCentroDeAtencion.getNombre());
         result.setDireccion(aCentroDeAtencion.getDireccion());
         result.setLocalidad(aCentroDeAtencion.getLocalidad());
