@@ -10,6 +10,7 @@ public class CentroDeAtencion_Mapper {
 
         result.setId(aCentroDeAtencion.getId());
         result.setNombre(aCentroDeAtencion.getNombre());
+        result.setProvincia(aCentroDeAtencion.getProvincia());
         result.setDireccion(aCentroDeAtencion.getDireccion());
         result.setLocalidad(aCentroDeAtencion.getLocalidad());
         result.setTelefono(aCentroDeAtencion.getTelefono());
