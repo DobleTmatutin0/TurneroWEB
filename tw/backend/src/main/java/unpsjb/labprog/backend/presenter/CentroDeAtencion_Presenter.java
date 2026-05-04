@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,41 @@ public class CentroDeAtencion_Presenter {
             return Response.badRequest(e.getMessage());
         }
                 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> update(@RequestBody CentroDeAtencion_DTO aCentroDeAtencion_DTO) {
+        if (aCentroDeAtencion_DTO.getId() <= 0) {
+            return Response.badRequest(
+                aCentroDeAtencion_DTO,
+                "Invalid ID"
+            );
+        }
+        if (aCentroDeAtencion_DTO.getNombre() == null || aCentroDeAtencion_DTO.getNombre().trim().isEmpty()) {
+            return Response.badRequest("El nombre es requerido");
+        }
+
+        if (aCentroDeAtencion_DTO.getDireccion() == null || aCentroDeAtencion_DTO.getDireccion().trim().isEmpty()) {
+            return Response.badRequest("La dirección es requerida");
+        }
+
+        if (
+        aCentroDeAtencion_DTO.getCoordenadas() == null ||
+        aCentroDeAtencion_DTO.getCoordenadas().getLatitud() == null ||
+        aCentroDeAtencion_DTO.getCoordenadas().getLongitud() == null  ||
+        !esNumeroValido(aCentroDeAtencion_DTO.getCoordenadas().getLatitud()) ||
+        !esNumeroValido(aCentroDeAtencion_DTO.getCoordenadas().getLongitud())) {
+            return Response.badRequest("Las coordenadas son inválidas");
+        }
+
+        if (this.centroDeAtencion_Svc.findByNameAndAddress(aCentroDeAtencion_DTO.getNombre(), aCentroDeAtencion.getDireccion())) {
+            return Response.conflict("Ya existe un centro de atención con ese nombre y dirección");        
+        }
+        
+        if (centroDeAtencion_Svc.findByAddress(aCentroDeAtencion_DTO.getDireccion())) {
+            return Response.conflict("Ya existe un centro de atención con esa dirección");
+        }
+        return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion_DTO));
     }
 
 
