@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 
 import unpsjb.labprog.backend.business.service.CentroDeAtencion_Service;
 import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
+import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.Response;
 
 @Controller
@@ -26,7 +28,7 @@ public class CentroDeAtencion_Presenter {
     public ResponseEntity<Object> findAll() {
         return Response.ok(centroDeAtencion_Svc.findAll());
     }
-    
+
     @PostMapping("")
     public ResponseEntity<Object> create(@RequestBody CentroDeAtencion_DTO aCentroDeAtencion) {
         if (aCentroDeAtencion.getNombre() == null || aCentroDeAtencion.getNombre().trim().isEmpty()) {
@@ -46,20 +48,41 @@ public class CentroDeAtencion_Presenter {
             return Response.badRequest("Las coordenadas son inválidas");
         }
 
-        if (this.centroDeAtencion_Svc.findByNameAndAddress(aCentroDeAtencion.getNombre(), aCentroDeAtencion.getDireccion())) {
+        if (this.centroDeAtencion_Svc.existsByNameAndAddress(aCentroDeAtencion.getNombre(), aCentroDeAtencion.getDireccion())) {
             return Response.conflict("Ya existe un centro de atención con ese nombre y dirección");        
         }
         
-        if (centroDeAtencion_Svc.findByAddress(aCentroDeAtencion.getDireccion())) {
+        if (centroDeAtencion_Svc.existsByAddress(aCentroDeAtencion.getDireccion())) {
             return Response.conflict("Ya existe un centro de atención con esa dirección");
         }
         
-        // if (aCentroDeAtencion.getId() != 0) {
-        //     return Response.badRequest("Un centro de atencion nuevo no debe tener un ID asignado de forma manual");
-        // }
-        
         try {
-            return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion), "Centro de atención creado");
+            double latitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLatitud());
+            double longitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLongitud());
+
+            if (latitud < -90 || latitud > 90) {
+                throw new RuntimeException("Latitud inválida (rango: -90 <= latitud <= 90)");
+            }
+
+            if (longitud < -180 || longitud > 180) {
+                throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
+            }
+
+            Point point = new Point(latitud, longitud);
+
+            CentroDeAtencion centroDeAtencionToSave = new CentroDeAtencion();
+
+            centroDeAtencionToSave.setId(0);
+            centroDeAtencionToSave.setNombre(aCentroDeAtencion.getNombre());
+            centroDeAtencionToSave.setProvincia(aCentroDeAtencion.getProvincia());
+            centroDeAtencionToSave.setLocalidad(aCentroDeAtencion.getLocalidad());
+            centroDeAtencionToSave.setDireccion(aCentroDeAtencion.getDireccion());
+            centroDeAtencionToSave.setCoordenadas(point);
+            centroDeAtencionToSave.setTelefono(aCentroDeAtencion.getTelefono());
+            
+            centroDeAtencion_Svc.save(centroDeAtencionToSave);
+
+            return Response.ok(null, "Centro de atención creado");
         } catch (Exception e) {
             return Response.badRequest(e.getMessage());
         }
@@ -91,14 +114,61 @@ public class CentroDeAtencion_Presenter {
             return Response.badRequest("Las coordenadas son inválidas");
         }
 
-        if (this.centroDeAtencion_Svc.findByNameAndAddress(aCentroDeAtencion_DTO.getNombre(), aCentroDeAtencion.getDireccion())) {
+        CentroDeAtencion existing = centroDeAtencion_Svc.findById(aCentroDeAtencion_DTO.getId());
+
+        // NO OP
+        boolean mismosDatos =
+            existing.getNombre().equals(aCentroDeAtencion_DTO.getNombre()) &&
+            existing.getDireccion().equals(aCentroDeAtencion_DTO.getDireccion()) &&
+            existing.getLocalidad().equals(aCentroDeAtencion_DTO.getLocalidad()) &&
+            existing.getProvincia().equals(aCentroDeAtencion_DTO.getProvincia()) &&
+            existing.getCoordenadas().getX() == Double.parseDouble(aCentroDeAtencion_DTO.getCoordenadas().getLatitud()) &&
+            existing.getCoordenadas().getY() == Double.parseDouble(aCentroDeAtencion_DTO.getCoordenadas().getLongitud());
+
+        if (mismosDatos) {
+            return Response.conflict("Ya existe un centro de atención con ese nombre y dirección");
+        }
+
+        CentroDeAtencion updatedCentroDeAtencion = centroDeAtencion_Svc.findById(aCentroDeAtencion_DTO.getId());
+        if (updatedCentroDeAtencion == null) {
+           return Response.badRequest("El centro de atención no existe");
+        }
+
+        CentroDeAtencion centerFoundByNameAndAddres = this.centroDeAtencion_Svc.findByNameAndAddress(aCentroDeAtencion_DTO.getNombre(), aCentroDeAtencion_DTO.getDireccion());
+        if (centerFoundByNameAndAddres != null && centerFoundByNameAndAddres.getId() != updatedCentroDeAtencion.getId()) {
             return Response.conflict("Ya existe un centro de atención con ese nombre y dirección");        
         }
         
-        if (centroDeAtencion_Svc.findByAddress(aCentroDeAtencion_DTO.getDireccion())) {
+        CentroDeAtencion centerFoundByAddress = this.centroDeAtencion_Svc.findByAddress(aCentroDeAtencion_DTO.getDireccion());
+        if (centerFoundByAddress!= null && centerFoundByAddress.getId() != updatedCentroDeAtencion.getId()) {
             return Response.conflict("Ya existe un centro de atención con esa dirección");
         }
-        return Response.ok(centroDeAtencion_Svc.save(aCentroDeAtencion_DTO));
+
+        updatedCentroDeAtencion.setNombre(aCentroDeAtencion_DTO.getNombre());
+        updatedCentroDeAtencion.setDireccion(aCentroDeAtencion_DTO.getDireccion());
+        updatedCentroDeAtencion.setProvincia(aCentroDeAtencion_DTO.getProvincia());
+        updatedCentroDeAtencion.setLocalidad(aCentroDeAtencion_DTO.getLocalidad());
+        updatedCentroDeAtencion.setTelefono(aCentroDeAtencion_DTO.getTelefono());
+
+        double latitud = Double.parseDouble(aCentroDeAtencion_DTO.getCoordenadas().getLatitud());
+        double longitud = Double.parseDouble(aCentroDeAtencion_DTO.getCoordenadas().getLongitud());
+
+        if (latitud < -90 || latitud > 90) {
+            throw new RuntimeException("Latitud inválida (rango: -90 <= latitud <= 90)");
+        }
+
+        if (longitud < -180 || longitud > 180) {
+            throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
+        }
+
+        Point point = new Point(latitud, longitud);
+
+        updatedCentroDeAtencion.setCoordenadas(point);
+        
+        return Response.ok(
+            centroDeAtencion_Svc.save(updatedCentroDeAtencion),
+            "Centro de atención modificado"
+        );
     }
 
 
