@@ -27,36 +27,23 @@ public class CentroDeAtencion_Service {
     }    
 
     @Transactional
-    public CentroDeAtencion save(CentroDeAtencion_DTO aCentroDeAtencion) {
-
-        double latitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLatitud());
-        double longitud = Double.parseDouble(aCentroDeAtencion.getCoordenadas().getLongitud());
-
-        if (latitud < -90 || latitud > 90) {
-            throw new RuntimeException("Latitud inválida (rango: -90 <= latitud <= 90)");
-        }
-
-        if (longitud < -180 || longitud > 180) {
-            throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
-        }
-
-        Point point = new Point(latitud, longitud);
-
-        CentroDeAtencion CentroDeAtencionToSave = new CentroDeAtencion();
-        CentroDeAtencionToSave.setNombre(aCentroDeAtencion.getNombre());
-        CentroDeAtencionToSave.setLocalidad(aCentroDeAtencion.getLocalidad());
-        CentroDeAtencionToSave.setDireccion(aCentroDeAtencion.getDireccion());
-        CentroDeAtencionToSave.setCoordenadas(point);
-        CentroDeAtencionToSave.setTelefono(aCentroDeAtencion.getTelefono());
-
-        return centroDeAtencion_Repo.save(CentroDeAtencionToSave);
+    public CentroDeAtencion save(CentroDeAtencion aCentroDeAtencion) {
+        return centroDeAtencion_Repo.save(aCentroDeAtencion);
     }
 
-    public boolean findByNameAndAddress(String aName, String anAddress) {
+    public CentroDeAtencion findByNameAndAddress(String aName, String anAddress) {
+        return centroDeAtencion_Repo.findByNameAndAddress(aName, anAddress);
+    }
+
+    public CentroDeAtencion findByAddress(String anAddress) {
+        return centroDeAtencion_Repo.findByAddress(anAddress);
+    }
+
+    public boolean existsByNameAndAddress(String aName, String anAddress) {
         return centroDeAtencion_Repo.existsByNameAndAddress(aName, anAddress);
     }
 
-    public boolean findByAddress(String anAddress) {
+    public boolean existsByAddress(String anAddress) {
         return centroDeAtencion_Repo.existsByAddress(anAddress);
     }
 
