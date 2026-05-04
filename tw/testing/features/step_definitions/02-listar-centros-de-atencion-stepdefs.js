@@ -71,7 +71,7 @@ Then(
                 e.nombre === exptd.Nombre &&
                 e.localidad === exptd.Localidad &&
                 e.direccion === exptd.Dirección &&
-                e.provincia === expected.Provincia &&
+                e.provincia === exptd.Provincia &&
                 Number(e.coordenadas.latitud) === Number(lat) &&
                 Number(e.coordenadas.longitud) === Number(long)
             );
