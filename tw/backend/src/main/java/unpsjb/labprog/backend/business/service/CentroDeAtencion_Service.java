@@ -24,11 +24,10 @@ public class CentroDeAtencion_Service {
         List<CentroDeAtencion_DTO> result = new ArrayList<>();
         centroDeAtencion_Repo.findAll().forEach(centro -> result.add(CentroDeAtencion_Mapper.toDTO(centro)));
         return result;
-    }    
-
-    @Transactional
-    public CentroDeAtencion save(CentroDeAtencion aCentroDeAtencion) {
-        return centroDeAtencion_Repo.save(aCentroDeAtencion);
+    }
+    
+    public CentroDeAtencion findById(Integer id) {
+        return centroDeAtencion_Repo.findById(id).get();
     }
 
     public CentroDeAtencion findByNameAndAddress(String aName, String anAddress) {
@@ -45,6 +44,11 @@ public class CentroDeAtencion_Service {
 
     public boolean existsByAddress(String anAddress) {
         return centroDeAtencion_Repo.existsByAddress(anAddress);
+    }
+
+    @Transactional
+    public CentroDeAtencion save(CentroDeAtencion aCentroDeAtencion) {
+        return centroDeAtencion_Repo.save(aCentroDeAtencion);
     }
 
     public void deleteAll() {
