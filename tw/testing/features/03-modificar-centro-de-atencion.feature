@@ -12,12 +12,11 @@ Antecedentes:
 
 Esquema del escenario: Intentar modificar centro de atención con conflictos
     Cuando el administrador modifica los datos del centro de atención "<NombreOriginal>" con los siguientes atributos:
-
-    nombre "<NombreNuevo>"
-    dirección "<DirecciónNueva>"
-    localidad "<LocalidadNueva>"
-    provincia "<ProvinciaNueva>"
-    coordenadas "<CoordenadasNuevas>"
+    | nombre      | <NombreNuevo>       |
+    | direccion   | <DirecciónNueva>    |
+    | localidad   | <LocalidadNueva>    |
+    | provincia   | <ProvinciaNueva>    |
+    | coordenadas | <CoordenadasNuevas> |
 
     Entonces el sistema responde con <status_code> y "<status_text>"
 
@@ -29,12 +28,11 @@ Esquema del escenario: Intentar modificar centro de atención con conflictos
 
 Esquema del escenario: Modificar centro de atención exitosamente
     Cuando el administrador modifica los datos del centro de atención "<NombreOriginal>" con los siguientes atributos:
-    
-    nombre "<NombreNuevo>"
-    dirección "<DirecciónNueva>"
-    localidad "<LocalidadNueva>"
-    provincia "<ProvinciaNueva>"
-    coordenadas "<CoordenadasNuevas>"
+    | nombre      | <NombreNuevo>       |
+    | direccion   | <DirecciónNueva>    |
+    | localidad   | <LocalidadNueva>    |
+    | provincia   | <ProvinciaNueva>    |
+    | coordenadas | <CoordenadasNuevas> |
 
     Entonces el sistema responde con <status_code> y "<status_text>"
 
