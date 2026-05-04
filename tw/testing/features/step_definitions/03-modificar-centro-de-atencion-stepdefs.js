@@ -13,7 +13,7 @@ Given(
 );
 
 Given(
-    'los siguientes centros de atención han sido registrados:',
+    'los sig centros de atención han sido registrados:',
     function(dataTable) {
         dataTable.hashes().forEach(element => {
             request(
@@ -60,6 +60,7 @@ When(
             `http://backend:8080/centros-de-atencion/${id}`,
             {
                 json: {
+                    id: centroToModify.id,
                     nombre: data.nombre,
                     direccion: data.direccion,
                     localidad: data.localidad,
@@ -73,11 +74,12 @@ When(
         );
 
         this.response = JSON.parse(this.backendRawResponse.getBody('utf8'));
+        console.log(this.response);
     }
 );
 
 Then(
-    'el sistema responde con {int} y {string}',
+    'rta-test-03: el sistema responde con {int} y {string}',
     function(expectedStatus, expectedMessage) {
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage);

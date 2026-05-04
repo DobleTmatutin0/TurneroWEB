@@ -4,7 +4,7 @@ Característica: Modificar Centro de Atención
 
 Antecedentes:
     Dado que existe un sist de centros de atencion
-    Y los siguientes centros de atención han sido registrados:
+    Y los sig centros de atención han sido registrados:
     |        Nombre          |          Dirección                       | Localidad     | Provincia | Coordenadas      |
     | Centro Médico Integral | Calle 9 de Julio 123, Piso 2, Oficina A  | Puerto Madryn | Chubut    | -42.765, -65.034 |
     | Centro de Salud Rawson | Avenida Libertad 456                     | Rawson        | Chubut    | -43.305, -65.102 |
@@ -18,7 +18,7 @@ Esquema del escenario: Intentar modificar centro de atención con conflictos
     | provincia   | <ProvinciaNueva>    |
     | coordenadas | <CoordenadasNuevas> |
 
-    Entonces el sistema responde con <status_code> y "<status_text>"
+    Entonces rta-test-03: el sistema responde con <status_code> y "<status_text>"
 
     Ejemplos: Modificaciones con conflictos
     | NombreOriginal         | NombreNuevo            | DirecciónNueva               | LocalidadNueva | ProvinciaNueva | CoordenadasNuevas | status_code | status_text                                                |
@@ -34,7 +34,7 @@ Esquema del escenario: Modificar centro de atención exitosamente
     | provincia   | <ProvinciaNueva>    |
     | coordenadas | <CoordenadasNuevas> |
 
-    Entonces el sistema responde con <status_code> y "<status_text>"
+    Entonces rta-test-03: el sistema responde con <status_code> y "<status_text>"
 
     Ejemplos: Modificaciones exitosas
     | NombreOriginal         | NombreNuevo                    | DirecciónNueva                          | LocalidadNueva | ProvinciaNueva | CoordenadasNuevas | status_code | status_text                   |
