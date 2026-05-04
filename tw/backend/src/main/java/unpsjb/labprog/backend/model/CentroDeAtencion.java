@@ -41,6 +41,8 @@ public class CentroDeAtencion {
     @NotNull(message = "La dirección es requerida")
     private String direccion;
 
+    private String provincia;
+    
     // habria q hacer unique  la triada nombre localidad direccion 
     private String localidad;
 

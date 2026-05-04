@@ -13,6 +13,7 @@ public class CentroDeAtencion_DTO {
     private Integer id;
     private String nombre;
     private String direccion;
+    private String provincia;
     private String localidad;
     private String telefono;
     private Coordenadas_DTO coordenadas;
