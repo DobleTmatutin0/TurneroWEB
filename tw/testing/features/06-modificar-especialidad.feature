@@ -8,10 +8,10 @@ Esquema del escenario: Modificar una especialidad exitosamente
     Entonces el sistema responde con el codigo: <status_code> y el mensaje: "<status_text>"
 
     Ejemplos:
-    | nombre_original   | descripcion_original                         | nombre_nuevo     | descripcion_nueva                           | status_code | status_text                           |
-    | Cardiología      | Diagnóstico y tratamiento de enfermedades del corazón y el sistema circulatorio.              | Cardiología      | Especialidad avanzada en cardiología.       | 200         | Especialidad editada exitosamente    |
-    | Pediatría        | Atención médica integral de niños y adolescentes                   | Pediatría        | Atención integral de la salud infantil     | 200         | Especialidad editada exitosamente    |
-    | Neurología       | Diagnóstico y tratamiento de enfermedades del sistema nervioso.                 | Neurociencia     | Diagnóstico avanzado en neurociencia       | 200         | Especialidad editada exitosamente    |
+    | nombre_original | descripcion_original                                                             | nombre_nuevo | descripcion_nueva                      | status_code | status_text                       |
+    | Cardiología     | Diagnóstico y tratamiento de enfermedades del corazón y el sistema circulatorio. | Cardiología  | Especialidad avanzada en cardiología.  | 200         | Especialidad editada exitosamente |
+    | Pediatría       | Atención médica integral de niños y adolescentes                                 | Pediatría    | Atención integral de la salud infantil | 200         | Especialidad editada exitosamente |
+    | Neurología      | Diagnóstico y tratamiento de enfermedades del sistema nervioso.                  | Neurociencia | Diagnóstico avanzado en neurociencia   | 200         | Especialidad editada exitosamente |
 
 Esquema del escenario: Intentar modificar una especialidad con un nombre duplicado
     Dado que la especialidad "<nombre_original>" existe en el sistema
