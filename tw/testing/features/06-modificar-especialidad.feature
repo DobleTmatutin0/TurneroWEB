@@ -14,15 +14,15 @@ Esquema del escenario: Modificar una especialidad exitosamente
     | Neurología      | Diagnóstico y tratamiento de enfermedades del sistema nervioso.                  | Neurociencia | Diagnóstico avanzado en neurociencia   | 200         | Especialidad editada exitosamente |
 
 Esquema del escenario: Intentar modificar una especialidad con un nombre duplicado
-    Dado que la especialidad "<nombre_original>" existe en el sistema
+    Dado que la especialidad "<nombre_original>" existe en el sistema con la descripción "<descripcion_original>"
     Y otra especialidad con el nombre "<nombre_existente>" ya está registrada
     Cuando el administrador intenta cambiar el nombre de "<nombre_original>" a "<nombre_existente>"
-    Entonces el sistema responde con el codigo: <status_code>  y el mensaje: "<status_text>"
+    Entonces el sistema responde con el codigo: <status_code> y el mensaje: "<status_text>"
 
     Ejemplos:
-    | nombre_original | nombre_existente | status_code | status_text                                 |
-    | Cardiología     | Pediatría        | 409         | El nombre de la especialidad ya está en uso |
-    | Neurología      | Ginecología      | 409         | El nombre de la especialidad ya está en uso |
+    | nombre_original | descripcion_original                                                             | nombre_existente | status_code | status_text                                 |
+    | Cardiología     | Diagnóstico y tratamiento de enfermedades del corazón y el sistema circulatorio. | Pediatría        | 409         | El nombre de la especialidad ya está en uso |
+    | Neurología      | Diagnóstico y tratamiento de enfermedades del sistema nervioso.                  | Ginecología      | 409         | El nombre de la especialidad ya está en uso |
 
 
 
