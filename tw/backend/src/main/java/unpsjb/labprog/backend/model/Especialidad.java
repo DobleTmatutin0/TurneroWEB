@@ -26,4 +26,6 @@ public class Especialidad {
     @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
+    private boolean eliminado = false;
 }
