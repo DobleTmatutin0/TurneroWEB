@@ -24,11 +24,11 @@ public class Especialidad_Service {
     }
 
     public Especialidad findById(int id) {
-        return especialidad_Repo.findById(id).get();
+        return especialidad_Repo.findByIdAndEliminadoFalse(id);
     }
 
     public Especialidad findByName(String aName) {
-        return especialidad_Repo.findByName(aName);
+        return especialidad_Repo.findByNameAndEliminadoFalse(aName);
     }
 
     public boolean existsByName(String aName) {
@@ -36,8 +36,22 @@ public class Especialidad_Service {
     }
 
     @Transactional
-    public Especialidad save(Especialidad aEspecialidad) {
-        return especialidad_Repo.save(aEspecialidad);
+    public Especialidad save(Especialidad anEspecialidad) {
+        return especialidad_Repo.save(anEspecialidad);
+    }
+
+    public void delete(int id) {
+        Especialidad especialidadToDelete = this.findById(id);
+
+        if (especialidadToDelete == null) {
+            throw new RuntimeException("No se encontró la especialidad");
+        }
+        if (especialidadToDelete.isEliminado()) {
+            throw new RuntimeException("La especialidad ya fue eliminada");
+        }
+
+        especialidadToDelete.setEliminado(true);
+        especialidad_Repo.save(especialidadToDelete);
     }
 
 
