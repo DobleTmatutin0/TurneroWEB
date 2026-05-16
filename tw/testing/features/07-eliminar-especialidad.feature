@@ -8,7 +8,7 @@ Esquema del escenario: Eliminar una especialidad exitosamente
     Entonces el sistema responde con el codigo: <status_code> y mensaje: "<status_text>"
 
     Ejemplos:
-    | nombre                 | status_code | status_text                        |
+    | nombre                 | status_code |  status_text                        |
     | Terapia Intensiva      | 200         | Especialidad eliminada exitosamente |              
     | Medicina Estética      | 200         | Especialidad eliminada exitosamente |
     | Medicina del Dolor     | 200         | Especialidad eliminada exitosamente |
