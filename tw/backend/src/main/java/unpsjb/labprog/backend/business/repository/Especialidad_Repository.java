@@ -12,15 +12,29 @@ public interface Especialidad_Repository extends JpaRepository<Especialidad, Int
     // all default methods
     
     @Query(
-        "SELECT COUNT(e) > o " +
+        "SELECT COUNT(e) > 0 " +
         "FROM Especialidad e " +
         "WHERE " +
-            "LOWER(e.nombre) = LOWER(?1)"
+            "LOWER(e.nombre) = LOWER(?1)" +
+            "AND e.eliminado = false"
     )
     public boolean existsByName(String aName);
      
-    @Query("SELECT e FROM Especialidad e WHERE LOWER(e.nombre) = LOWER(?1)")
-    public Especialidad findByName(String aName);
+    @Query(
+        "SELECT e " +
+        "FROM Especialidad e " +
+        "WHERE " +
+            "LOWER(e.nombre) = LOWER(?1) " +
+            "AND e.eliminado = false"
+    )
+    public Especialidad findByNameAndEliminadoFalse(String aName);
 
-
+    @Query(
+        "SELECT e " +
+        "FROM Especialidad e " +
+        "WHERE " +
+            "e.id = ?1 " +
+            "AND e.eliminado = false"
+    )
+    public Especialidad findByIdAndEliminadoFalse(int id);
 } 
