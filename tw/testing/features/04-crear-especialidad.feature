@@ -31,7 +31,7 @@ Esquema del escenario: Crear una especialidad exitosamente
 
 Esquema del escenario: Intentar crear una especialidad con nombre duplicado
     Cuando el administrador crea una especialidad con el nombre "<nombre>" y la descripción "<descripcion>"
-    Entonces el sistema responde con codigo: <status_code> y mensaje: "<status_text>"
+    Entonces rta-test-04: el sistema responde con codigo: <status_code> y mensaje: "<status_text>"
 
     Ejemplos:
     | nombre            | descripcion                                  | status_code |              status_text                         |

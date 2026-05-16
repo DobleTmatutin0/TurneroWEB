@@ -27,7 +27,7 @@ When(
 );
 
 Then(
-    'el sistema responde con el codigo: {int} y mensaje: {string}',
+    'rta-test-07: el sistema responde con el codigo: {int} y mensaje: {string}',
     function(expectedStatus, expectedMessage) {
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage);

@@ -5,7 +5,7 @@ Característica: Listar Especialidades
 Esquema del escenario: Recuperar todas las especialidades registradas en el sistema
     Dado que existen 19 especialidades registradas en el sistema
     Cuando un usuario del sistema solicita la lista de especialidades
-    Entonces el sistema responde con codigo: <status_code> y mensaje: "<status_text>" 
+    Entonces rta-test-05: el sistema responde con codigo: <status_code> y mensaje: "<status_text>" 
     Y la lista contiene las siguientes especialidades:
     
     |        nombre             |                      descripcion                                                    |

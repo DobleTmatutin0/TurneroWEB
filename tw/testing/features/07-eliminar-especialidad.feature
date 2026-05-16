@@ -5,7 +5,7 @@ Característica: Eliminar Especialidades
 Esquema del escenario: Eliminar una especialidad exitosamente
     Dado que la especialidad "<nombre>" existe en el sistema
     Cuando el administrador elimina la especialidad "<nombre>"
-    Entonces el sistema responde con el codigo: <status_code> y mensaje: "<status_text>"
+    Entonces rta-test-07: el sistema responde con el codigo: <status_code> y mensaje: "<status_text>"
 
     Ejemplos:
     | nombre                 | status_code |  status_text                        |
