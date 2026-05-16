@@ -21,7 +21,6 @@ When(
         );
 
         this.response = JSON.parse(this.postResponse.getBody('utf8'));
-
     }
 );
 
@@ -30,6 +29,5 @@ Then(
     function(expectedStatus, expectedMessage) {
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage);
-
     }
 );
