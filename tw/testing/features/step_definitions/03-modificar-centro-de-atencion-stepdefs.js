@@ -74,7 +74,7 @@ When(
         );
 
         this.response = JSON.parse(this.backendRawResponse.getBody('utf8'));
-        console.log(this.response);
+        // console.log(this.response);
     }
 );
 
