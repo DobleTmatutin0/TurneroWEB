@@ -9,11 +9,11 @@ Esquema del escenario: Eliminar una especialidad exitosamente
 
     Ejemplos:
     | nombre                 | status_code | status_text                        |
-    | Terapia Intensiva      | 200         |Especialidad eliminada exitosamente |              
-    | Medicina Estética      | 200         |Especialidad eliminada exitosamente |
-    | Medicina del Dolor     | 200         |Especialidad eliminada exitosamente |
-    | Cirugía Reconstructiva | 200         |Especialidad eliminada exitosamente |
-    | Medicina Paliativa     | 200         |Especialidad eliminada exitosamente |
+    | Terapia Intensiva      | 200         | Especialidad eliminada exitosamente |              
+    | Medicina Estética      | 200         | Especialidad eliminada exitosamente |
+    | Medicina del Dolor     | 200         | Especialidad eliminada exitosamente |
+    | Cirugía Reconstructiva | 200         | Especialidad eliminada exitosamente |
+    | Medicina Paliativa     | 200         | Especialidad eliminada exitosamente |
 
 
 
