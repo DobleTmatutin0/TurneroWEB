@@ -22,10 +22,10 @@ When(
 );
 
 Then(
-    'rta-test-05: el sistema responde con codigo: {int} y mensaje: {string}',
-    function(expectedStatus, expectedMessage) {
-        assert.strictEqual(this.response.status, expectedStatus);
-        assert.strictEqual(this.response.message, expectedMessage);
+    'rta-test-05: el sistema responde con status_code 200 y status_text OK',
+    function() {
+        assert.strictEqual(this.response.status, 200);
+        assert.strictEqual(this.response.message, "OK");
     }
 );
 

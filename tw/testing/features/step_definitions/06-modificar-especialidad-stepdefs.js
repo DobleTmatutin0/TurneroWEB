@@ -8,7 +8,7 @@ Given(
     function(nombre_original, descripcion_original) {
         this.getByNameResponse = request(
             'GET',
-            `http://backend:8080/especialidad/${nombre_original}`
+            `http://backend:8080/especialidad/${encodeURIComponent(nombre_original)}`
         );
 
         this.especialidadToModify = JSON.parse(this.getByNameResponse.getBody('utf8')).data;
@@ -27,7 +27,7 @@ Given(
 
 When(
     'el administrador edita la especialidad {string} cambiando su nombre a {string} y su descripción a {string}',
-    function(nombre_nuevo, descripcion_nueva) {
+    function(_nombre_original, nombre_nuevo, descripcion_nueva) {
         this.putResponse = request(
             'PUT',
             `http://backend:8080/especialidad/${this.especialidadToModify.id}`,
@@ -47,7 +47,7 @@ When(
 // When escenario 2
 When(
     'el administrador intenta cambiar el nombre de {string} a {string}',
-    function(nombre_existente) {
+    function(_nombre_original, nombre_existente) {
         this.putResponse = request(
             'PUT',
             `http://backend:8080/especialidad/${this.especialidadToModify.id}`,
@@ -65,7 +65,7 @@ When(
 );
 
 Then(
-    'el sistema responde con el codigo: {int} y el mensaje: {string}',
+    'rta-test-06: el sistema responde con el codigo {int} y el mensaje {string}',
     function(expectedStatus, expectedMessage) {
         assert.strictEqual(this.response.status, expectedStatus);
         assert.strictEqual(this.response.message, expectedMessage);
