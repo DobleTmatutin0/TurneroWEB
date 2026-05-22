@@ -55,13 +55,15 @@ public class Especialidad_Presenter {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@RequestBody Especialidad anEspecialidad) {
+        Especialidad especialidadExistente = this.especialidad_Svc.findByName(anEspecialidad.getNombre());
+
         if (anEspecialidad.getNombre() == null || anEspecialidad.getNombre().trim().isEmpty()) {
             return Response.conflict("El nombre de la especialidad es obligatorio");
         }
         if (anEspecialidad.getDescripcion() == null || anEspecialidad.getDescripcion().trim().isEmpty()) {
             return Response.conflict("La descripción de la especialidad es obligatoria");
         }
-        if (!especialidad_Svc.existsByName(anEspecialidad.getNombre())) {
+        if (especialidadExistente != null && especialidadExistente.getId() != anEspecialidad.getId()) {
             return Response.conflict("El nombre de la especialidad ya está en uso");
         }
 
@@ -72,6 +74,6 @@ public class Especialidad_Presenter {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") int id) {
         especialidad_Svc.delete(id);
-        return Response.ok("Especialidad eliminada exitosamente");
+        return Response.ok(null, "Especialidad eliminada exitosamente");
     }
 }
