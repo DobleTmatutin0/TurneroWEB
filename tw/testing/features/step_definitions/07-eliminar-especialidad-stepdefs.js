@@ -7,7 +7,7 @@ Given(
     function(nombre) {
         this.getResponse = request(
             'GET',
-            `http://backend:8080/especialidad/${nombre}`
+            `http://backend:8080/especialidad/${encodeURIComponent(nombre)}`
         );
 
         this.especialidadToDelete = JSON.parse(this.getResponse.getBody('utf8')).data;
@@ -18,11 +18,13 @@ Given(
 
 When(
     'el administrador elimina la especialidad {string}',
-    function() {
+    function(_nombre) {
         this.deleteResponse = request(
             'DELETE',
-            `http://backend:8080/especialidad/${this.especialidadToDelete.nombre}`
+            `http://backend:8080/especialidad/${this.especialidadToDelete.id}`
         );
+
+        this.response = JSON.parse(this.deleteResponse.getBody('utf8'));
     }
 );
 
