@@ -1,5 +1,7 @@
 package unpsjb.labprog.backend.business.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,7 +21,14 @@ public interface Especialidad_Repository extends JpaRepository<Especialidad, Int
             "AND e.eliminado = false"
     )
     public boolean existsByName(String aName);
-     
+
+    @Query(
+        "SELECT e " +
+        "FROM Especialidad e " +
+        "WHERE e.eliminado = false"
+    )
+    public List<Especialidad> findAllNotEliminado();
+
     @Query(
         "SELECT e " +
         "FROM Especialidad e " +

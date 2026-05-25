@@ -19,7 +19,7 @@ public class Especialidad_Service {
 
     public List<Especialidad> findAll() {
         List<Especialidad> result = new ArrayList<>();
-        especialidad_Repo.findAll().forEach(especialidad -> result.add(especialidad));
+        especialidad_Repo.findAllNotEliminado().forEach(especialidad -> result.add(especialidad));
         return result;
     }
 
