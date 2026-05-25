@@ -10,6 +10,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -52,7 +53,8 @@ public class CentroDeAtencion {
     @Column(unique = true)
     private String telefono;
 
-    @OneToMany(mappedBy = "centroDeAtencion")
+    @OneToMany()
+    @JoinColumn(name = "centro_atencion_id")
     private List<Consultorio> consultorios;
 
     private Point coordenadas;
