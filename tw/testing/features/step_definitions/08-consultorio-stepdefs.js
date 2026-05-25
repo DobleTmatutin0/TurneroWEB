@@ -159,3 +159,55 @@ Then(
         });
     }
 );
+
+
+
+
+// ================================================
+// Editar consultorios de un centro de atencion
+// ================================================
+Given(
+    'que existe el centro {string} cargado en el sistema',
+    function(centro_atencion) {
+        const getResponse = request(
+            'GET',
+            `http://backend:8080/centros-de-atencion/${centro_atencion}`
+        );
+
+        this.centroToModify = JSON.parse(getResponse.getBody('utf8')).data;
+
+        assert.ok(this.centroToModify, `No se encontró ${centro_atencion}`);
+    }
+);
+
+When(
+    'se modifica el consultorio Nº {int} y nombre {string} del centro {string} con el num {int} y el nombre {string}',
+    function(oldNum, oldNombre, centroAtencion, newNum, newNombre) {
+        
+        const consultorioToModify =
+            this.centroToModify.consultorios.find(c =>
+                Number(c.numero) === Number(oldNum) &&
+                c.nombre === oldNombre
+            );
+
+        assert.ok(
+            consultorioToModify,
+            `No se encontró el consultorio ${oldNombre}`
+        );
+
+        consultorioToModify.numero = newNum;
+        consultorioToModify.nombre = newNombre;
+
+        const putResponse = request(
+            'PUT',
+            `http://backend:8080/centros-de-atencion/${this.centroToModify.id}`,
+            {
+                json: this.centroToModify
+            }
+        );
+
+        this.response = JSON.parse(
+            putResponse.getBody('utf8')
+        );
+    }
+);
