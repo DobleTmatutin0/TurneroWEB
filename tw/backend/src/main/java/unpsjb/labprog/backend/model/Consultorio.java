@@ -35,7 +35,4 @@ public class Consultorio {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
-    private boolean eliminado = false;
-
 }
