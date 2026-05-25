@@ -1,5 +1,7 @@
 package unpsjb.labprog.backend.model;
 
+import java.util.List;
+
 import org.springframework.data.geo.Point;
 
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -48,6 +51,9 @@ public class CentroDeAtencion {
 
     @Column(unique = true)
     private String telefono;
+
+    @OneToMany(mappedBy = "centroDeAtencion")
+    private List<Consultorio> consultorios;
 
     private Point coordenadas;
 
