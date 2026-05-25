@@ -1,5 +1,6 @@
 package unpsjb.labprog.backend.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.geo.Point;
@@ -53,10 +54,10 @@ public class CentroDeAtencion {
     @Column(unique = true)
     private String telefono;
 
+    private Point coordenadas;
+    
     @OneToMany()
     @JoinColumn(name = "centro_atencion_id")
-    private List<Consultorio> consultorios;
-
-    private Point coordenadas;
-
+    private List<Consultorio> consultorios = new ArrayList<>();
+    
 }
