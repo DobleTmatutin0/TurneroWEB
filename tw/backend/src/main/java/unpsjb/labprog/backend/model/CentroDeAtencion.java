@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -56,7 +57,7 @@ public class CentroDeAtencion {
 
     private Point coordenadas;
     
-    @OneToMany()
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "centro_atencion_id")
     private List<Consultorio> consultorios = new ArrayList<>();
     
