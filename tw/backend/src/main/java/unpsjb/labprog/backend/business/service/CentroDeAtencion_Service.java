@@ -11,6 +11,7 @@ import unpsjb.labprog.backend.business.repository.CentroDeAtencion_Repository;
 import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.mapper.CentroDeAtencion_Mapper;
 import unpsjb.labprog.backend.model.CentroDeAtencion;
+import unpsjb.labprog.backend.model.Consultorio;
 
 @Service
 
@@ -27,6 +28,10 @@ public class CentroDeAtencion_Service {
     
     public CentroDeAtencion findById(Integer id) {
         return centroDeAtencion_Repo.findById(id).get();
+    }
+
+    public CentroDeAtencion findByName(String aName) {
+        return centroDeAtencion_Repo.findByName(aName);
     }
 
     public CentroDeAtencion findByNameAndAddress(String aName, String anAddress) {
@@ -52,6 +57,11 @@ public class CentroDeAtencion_Service {
 
     public void deleteAll() {
         centroDeAtencion_Repo.deleteAll();
+    }
+
+    public List<Consultorio> getConsultorios(String aCentroName) {
+        CentroDeAtencion centro = this.findByName(aCentroName);
+        return centro.getConsultorios();
     }
 
 }

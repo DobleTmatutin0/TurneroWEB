@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,17 @@ public class CentroDeAtencion_Presenter {
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
         return Response.ok(centroDeAtencion_Svc.findAll());
+    }
+
+    @GetMapping("/nombre")
+    public ResponseEntity<Object> findByName(@PathVariable("nombre") String aName) {
+        return Response.ok(centroDeAtencion_Svc.findByName(aName));
+    }
+
+    @GetMapping("/{nombre}/consultorios")
+    public ResponseEntity<Object> getConsultorios(@PathVariable("nombre") String aName) {
+
+        return Response.ok(centroDeAtencion_Svc.getConsultorios(aName));
     }
 
     @PostMapping("")
