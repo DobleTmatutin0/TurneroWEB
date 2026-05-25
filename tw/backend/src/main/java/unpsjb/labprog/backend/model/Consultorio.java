@@ -35,10 +35,6 @@ public class Consultorio {
     @Column(nullable = false)
     private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "centro_atencion_id")
-    private CentroDeAtencion centroDeAtencion;
-
     @Column(nullable = false)
     private boolean eliminado = false;
 
