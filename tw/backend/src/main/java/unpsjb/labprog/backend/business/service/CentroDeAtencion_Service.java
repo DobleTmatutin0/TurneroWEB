@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,8 @@ import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.mapper.CentroDeAtencion_Mapper;
 import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.model.Consultorio;
+
+import unpsjb.labprog.backend.exception.NotFoundException;
 
 @Service
 
@@ -51,8 +54,20 @@ public class CentroDeAtencion_Service {
     }
 
     @Transactional
-    public CentroDeAtencion save(CentroDeAtencion aCentroDeAtencion) {
-        return centroDeAtencion_Repo.save(aCentroDeAtencion);
+    public CentroDeAtencion save(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
+            this.validateBaseFields(aCentroDeAtencionDTO);
+        if (aCentroDeAtencionDTO.getId() == 0) {
+            this.validateDuplicadosCreate(aCentroDeAtencionDTO);
+            return centroDeAtencion_Repo.save(this.toEntity(aCentroDeAtencionDTO));
+        }
+        if (aCentroDeAtencionDTO.getId() > 0) {
+            CentroDeAtencion aCentroDeAtencionToUpdate = this.findById(aCentroDeAtencionDTO.getId());
+
+            this.validateDuplicadosUpdate(aCentroDeAtencionDTO, aCentroDeAtencionToUpdate);
+            return centroDeAtencion_Repo.save(this.updateEntityFields(aCentroDeAtencionDTO, aCentroDeAtencionToUpdate));            
+        }
+        
+        throw new RuntimeException("Invalid ID");
     }
 
     public void deleteAll() {
@@ -64,4 +79,109 @@ public class CentroDeAtencion_Service {
         return centro.getConsultorios();
     }
 
+
+
+    private void validateBaseFields(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
+        if (aCentroDeAtencionDTO.getNombre() == null || aCentroDeAtencionDTO.getNombre().trim().isEmpty()) {
+            throw new RuntimeException("El nombre es requerido");
+        }
+
+        if (aCentroDeAtencionDTO.getDireccion() == null || aCentroDeAtencionDTO.getDireccion().trim().isEmpty()) {
+            throw new RuntimeException("La dirección es requerida");
+        }
+
+        if (
+        aCentroDeAtencionDTO.getCoordenadas() == null ||
+        aCentroDeAtencionDTO.getCoordenadas().getLatitud() == null ||
+        aCentroDeAtencionDTO.getCoordenadas().getLongitud() == null  ||
+        !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLatitud()) ||
+        !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLongitud())) {
+            throw new RuntimeException("Las coordenadas son inválidas");
+        }
+        double latitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud());
+        double longitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLongitud());
+
+        if (latitud < -90 || latitud > 90) {
+            throw new RuntimeException("Latitud inválida (rango: -90 <= latitud <= 90)");
+        }
+
+        if (longitud < -180 || longitud > 180) {
+            throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
+        }
+    }
+
+    private void validateDuplicadosCreate(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
+
+        if (this.existsByNameAndAddress(aCentroDeAtencionDTO.getNombre(), aCentroDeAtencionDTO.getDireccion())) {
+            throw new RuntimeException("Ya existe un centro de atención con ese nombre y dirección");        
+        }
+        
+        if (this.existsByAddress(aCentroDeAtencionDTO.getDireccion())) {
+            throw new RuntimeException("Ya existe un centro de atención con esa dirección");
+        }
+        
+    }
+
+    private CentroDeAtencion toEntity(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
+
+        double latitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud());
+        double longitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLongitud());
+        Point point = new Point(latitud, longitud);
+
+        CentroDeAtencion centroDeAtencionToSave = new CentroDeAtencion();
+
+        centroDeAtencionToSave.setId(aCentroDeAtencionDTO.getId());
+        centroDeAtencionToSave.setNombre(aCentroDeAtencionDTO.getNombre());
+        centroDeAtencionToSave.setProvincia(aCentroDeAtencionDTO.getProvincia());
+        centroDeAtencionToSave.setLocalidad(aCentroDeAtencionDTO.getLocalidad());
+        centroDeAtencionToSave.setDireccion(aCentroDeAtencionDTO.getDireccion());
+        centroDeAtencionToSave.setCoordenadas(point);
+        centroDeAtencionToSave.setTelefono(aCentroDeAtencionDTO.getTelefono());
+
+        return centroDeAtencionToSave;
+    }
+
+    private void validateDuplicadosUpdate(CentroDeAtencion_DTO aCentroDeAtencionDTO, CentroDeAtencion aCentroToUpdate) {
+
+        if (aCentroToUpdate == null) {
+           throw new NotFoundException("El centro de atención no existe");
+        }
+
+        CentroDeAtencion centerFoundByNameAndAddres = this.findByNameAndAddress(aCentroDeAtencionDTO.getNombre(), aCentroDeAtencionDTO.getDireccion());
+        if (centerFoundByNameAndAddres != null && centerFoundByNameAndAddres.getId() != aCentroToUpdate.getId()) {
+            throw new RuntimeException("Ya existe un centro de atención con ese nombre y dirección");        
+        }
+        
+        CentroDeAtencion centerFoundByAddress = this.findByAddress(aCentroDeAtencionDTO.getDireccion());
+        if (centerFoundByAddress!= null && centerFoundByAddress.getId() != aCentroToUpdate.getId()) {
+            throw new RuntimeException("Ya existe un centro de atención con esa dirección");
+        }
+    }
+
+    private CentroDeAtencion updateEntityFields(CentroDeAtencion_DTO aCentroDeAtencionDTO, CentroDeAtencion aCentroToUpdate) {
+
+        aCentroToUpdate.setNombre(aCentroDeAtencionDTO.getNombre());
+        aCentroToUpdate.setDireccion(aCentroDeAtencionDTO.getDireccion());
+        aCentroToUpdate.setProvincia(aCentroDeAtencionDTO.getProvincia());
+        aCentroToUpdate.setLocalidad(aCentroDeAtencionDTO.getLocalidad());
+        aCentroToUpdate.setTelefono(aCentroDeAtencionDTO.getTelefono());
+
+        Point point = new Point(
+            Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud()),
+            Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLongitud())
+        );
+
+        aCentroToUpdate.setCoordenadas(point);
+        
+        return aCentroToUpdate;
+    }
+
+    private boolean esNumeroValido(String valor) {
+        try {
+            Double.parseDouble(valor);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
