@@ -18,6 +18,7 @@ When(
     function(nombre, direccion, localidad, provincia, coordenadas) {
         
         this.aNewCentroDeAtencion = {
+            "id": 0,
             "nombre": nombre,
             "direccion": direccion,
             "localidad": localidad,
