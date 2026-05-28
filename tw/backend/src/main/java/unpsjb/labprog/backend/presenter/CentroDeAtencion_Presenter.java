@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.ResponseEntity;
 
 import unpsjb.labprog.backend.business.service.CentroDeAtencion_Service;
@@ -17,7 +16,6 @@ import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.exception.InvalidDataException;
 import unpsjb.labprog.backend.exception.NoOperationException;
 import unpsjb.labprog.backend.exception.NotFoundException;
-import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.Response;
 
 @Controller
@@ -81,8 +79,9 @@ public class CentroDeAtencion_Presenter {
 
 
     @DeleteMapping("/test/delete-all")
-    public void deleteAll() {
+    public ResponseEntity<Object> deleteAll() {
         centroDeAtencion_Svc.deleteAll();
+        return Response.ok(null, "Borrado exitoso");
     }
 
 }
