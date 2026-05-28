@@ -5,9 +5,9 @@ const request = require('sync-request');
 Given(
     'que existe un sistema de centros de atencion',
     function() {
-        request(
+        const deleteRta = request(
             'DELETE',
-            'http://backend:8080/test/delete-all'
+            'http://backend:8080/centros-de-atencion/test/delete-all'
         );
     }
 );
@@ -17,7 +17,7 @@ Given(
     function(dataTable) {
         dataTable.hashes().forEach(dataTableElement => {
 
-            request(
+            const postResponse = request(
                 'POST',
                 'http://backend:8080/centros-de-atencion',
                 {
