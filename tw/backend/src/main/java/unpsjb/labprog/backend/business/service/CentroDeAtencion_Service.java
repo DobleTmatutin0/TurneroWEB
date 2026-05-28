@@ -56,8 +56,8 @@ public class CentroDeAtencion_Service {
 
     @Transactional
     public CentroDeAtencion save(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
-            this.validateBaseFields(aCentroDeAtencionDTO);
-        if (aCentroDeAtencionDTO.getId() == 0) {
+        this.validateBaseFields(aCentroDeAtencionDTO);
+        if (aCentroDeAtencionDTO.getId() == null || aCentroDeAtencionDTO.getId() == 0) {
             this.validateDuplicadosCreate(aCentroDeAtencionDTO);
             return centroDeAtencion_Repo.save(this.toEntity(aCentroDeAtencionDTO));
         }
@@ -72,6 +72,7 @@ public class CentroDeAtencion_Service {
         throw new RuntimeException("Invalid ID");
     }
 
+    @Transactional
     public void deleteAll() {
         centroDeAtencion_Repo.deleteAll();
     }
@@ -132,7 +133,6 @@ public class CentroDeAtencion_Service {
 
         CentroDeAtencion centroDeAtencionToSave = new CentroDeAtencion();
 
-        centroDeAtencionToSave.setId(aCentroDeAtencionDTO.getId());
         centroDeAtencionToSave.setNombre(aCentroDeAtencionDTO.getNombre());
         centroDeAtencionToSave.setProvincia(aCentroDeAtencionDTO.getProvincia());
         centroDeAtencionToSave.setLocalidad(aCentroDeAtencionDTO.getLocalidad());
