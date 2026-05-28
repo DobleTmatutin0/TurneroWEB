@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 
 import unpsjb.labprog.backend.business.service.CentroDeAtencion_Service;
 import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
+import unpsjb.labprog.backend.exception.InvalidDataException;
+import unpsjb.labprog.backend.exception.NoOperationException;
 import unpsjb.labprog.backend.exception.NotFoundException;
 import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.Response;
@@ -47,8 +49,12 @@ public class CentroDeAtencion_Presenter {
         try {
             centroDeAtencion_Svc.save(aCentroDeAtencionDTO);
             return Response.ok(null, "Centro de atención creado");
-        } catch (Exception e) {
+        }
+        catch (InvalidDataException e) {
             return Response.badRequest(e.getMessage());
+        }
+        catch (Exception e) {
+            return Response.conflict(e.getMessage());
         }
     }
 
@@ -61,11 +67,16 @@ public class CentroDeAtencion_Presenter {
         catch (NotFoundException e) {
             return Response.notFound(e.getMessage());
         }
+        catch (InvalidDataException e) {
+            return Response.badRequest(e.getMessage());
+        }
+        catch (NoOperationException e) {
+            return Response.conflict(e.getMessage());
+        }
         catch (Exception e) {
             return Response.conflict(e.getMessage());
         }
-        
-        
+                
     }
 
 
