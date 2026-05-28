@@ -13,7 +13,8 @@ import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.mapper.CentroDeAtencion_Mapper;
 import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.model.Consultorio;
-
+import unpsjb.labprog.backend.exception.InvalidDataException;
+import unpsjb.labprog.backend.exception.NoOperationException;
 import unpsjb.labprog.backend.exception.NotFoundException;
 
 @Service
@@ -63,6 +64,7 @@ public class CentroDeAtencion_Service {
         if (aCentroDeAtencionDTO.getId() > 0) {
             CentroDeAtencion aCentroDeAtencionToUpdate = this.findById(aCentroDeAtencionDTO.getId());
 
+            this.validateNoOperationOnUpdate(aCentroDeAtencionDTO, aCentroDeAtencionToUpdate);
             this.validateDuplicadosUpdate(aCentroDeAtencionDTO, aCentroDeAtencionToUpdate);
             return centroDeAtencion_Repo.save(this.updateEntityFields(aCentroDeAtencionDTO, aCentroDeAtencionToUpdate));            
         }
@@ -83,11 +85,11 @@ public class CentroDeAtencion_Service {
 
     private void validateBaseFields(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
         if (aCentroDeAtencionDTO.getNombre() == null || aCentroDeAtencionDTO.getNombre().trim().isEmpty()) {
-            throw new RuntimeException("El nombre es requerido");
+            throw new InvalidDataException("El nombre es requerido");
         }
 
         if (aCentroDeAtencionDTO.getDireccion() == null || aCentroDeAtencionDTO.getDireccion().trim().isEmpty()) {
-            throw new RuntimeException("La dirección es requerida");
+            throw new InvalidDataException("La dirección es requerida");
         }
 
         if (
@@ -96,7 +98,7 @@ public class CentroDeAtencion_Service {
         aCentroDeAtencionDTO.getCoordenadas().getLongitud() == null  ||
         !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLatitud()) ||
         !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLongitud())) {
-            throw new RuntimeException("Las coordenadas son inválidas");
+            throw new InvalidDataException("Las coordenadas son inválidas");
         }
         double latitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud());
         double longitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLongitud());
@@ -155,6 +157,21 @@ public class CentroDeAtencion_Service {
         CentroDeAtencion centerFoundByAddress = this.findByAddress(aCentroDeAtencionDTO.getDireccion());
         if (centerFoundByAddress!= null && centerFoundByAddress.getId() != aCentroToUpdate.getId()) {
             throw new RuntimeException("Ya existe un centro de atención con esa dirección");
+        }
+    }
+
+    private void validateNoOperationOnUpdate(CentroDeAtencion_DTO aCentroDeAtencionDTO, CentroDeAtencion aCentroToUpdate) {
+        // checkea que el objeto que se va a actualizar realmente este cambiando algo, si no se cambia nada
+        // no hay operacion real NoOp (no operation)
+        boolean mismosDatos =
+            aCentroToUpdate.getNombre().equals(aCentroDeAtencionDTO.getNombre()) &&
+            aCentroToUpdate.getDireccion().equals(aCentroDeAtencionDTO.getDireccion()) &&
+            aCentroToUpdate.getLocalidad().equals(aCentroDeAtencionDTO.getLocalidad()) &&
+            aCentroToUpdate.getProvincia().equals(aCentroDeAtencionDTO.getProvincia()) &&
+            aCentroToUpdate.getCoordenadas().getX() == Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud()) &&
+            aCentroToUpdate.getCoordenadas().getY() == Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLongitud());
+        if (mismosDatos) {
+            throw new NoOperationException("Ya existe un centro de atención con ese nombre y dirección");
         }
     }
 
