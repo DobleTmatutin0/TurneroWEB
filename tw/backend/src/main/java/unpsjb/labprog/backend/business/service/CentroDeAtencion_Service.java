@@ -1,7 +1,9 @@
 package unpsjb.labprog.backend.business.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
@@ -13,6 +15,7 @@ import unpsjb.labprog.backend.dto.CentroDeAtencion_DTO;
 import unpsjb.labprog.backend.mapper.CentroDeAtencion_Mapper;
 import unpsjb.labprog.backend.model.CentroDeAtencion;
 import unpsjb.labprog.backend.model.Consultorio;
+import unpsjb.labprog.backend.exception.ConflictException;
 import unpsjb.labprog.backend.exception.InvalidDataException;
 import unpsjb.labprog.backend.exception.NoOperationException;
 import unpsjb.labprog.backend.exception.NotFoundException;
@@ -94,11 +97,11 @@ public class CentroDeAtencion_Service {
         }
 
         if (
-        aCentroDeAtencionDTO.getCoordenadas() == null ||
-        aCentroDeAtencionDTO.getCoordenadas().getLatitud() == null ||
-        aCentroDeAtencionDTO.getCoordenadas().getLongitud() == null  ||
-        !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLatitud()) ||
-        !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLongitud())) {
+            aCentroDeAtencionDTO.getCoordenadas() == null ||
+            aCentroDeAtencionDTO.getCoordenadas().getLatitud() == null ||
+            aCentroDeAtencionDTO.getCoordenadas().getLongitud() == null  ||
+            !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLatitud()) ||
+            !esNumeroValido(aCentroDeAtencionDTO.getCoordenadas().getLongitud())) {
             throw new InvalidDataException("Las coordenadas son inválidas");
         }
         double latitud = Double.parseDouble(aCentroDeAtencionDTO.getCoordenadas().getLatitud());
@@ -111,6 +114,9 @@ public class CentroDeAtencion_Service {
         if (longitud < -180 || longitud > 180) {
             throw new RuntimeException("Longitud inválida (rango: -180 <= longitud <= 180)");
         }
+        for (Consultorio consultorio : aCentroDeAtencionDTO.getConsultorios()) {
+            this.validateConsultorio(consultorio);
+        } 
     }
 
     private void validateDuplicadosCreate(CentroDeAtencion_DTO aCentroDeAtencionDTO) {
@@ -121,6 +127,18 @@ public class CentroDeAtencion_Service {
         
         if (this.existsByAddress(aCentroDeAtencionDTO.getDireccion())) {
             throw new RuntimeException("Ya existe un centro de atención con esa dirección");
+        }
+
+        // checkeo de consultorios repetidos dentro de un centro
+        Set<Integer> numerosConsultorios = new HashSet<>();
+        Set<String> nombresConsultorios = new HashSet<>();
+        for(Consultorio consultorio : aCentroDeAtencionDTO.getConsultorios()) {
+            if (!numerosConsultorios.add(consultorio.getNumero())) {
+                throw new ConflictException("El número de consultorio ya está registrado");
+            }
+            if (!nombresConsultorios.add(consultorio.getNombre())) {
+                throw new ConflictException("El nombre del consultorio ya está registrado");
+            } 
         }
         
     }
@@ -201,4 +219,49 @@ public class CentroDeAtencion_Service {
             return false;
         }
     }
+
+    private void validateConsultorio(Consultorio aConsultorio) {
+        if (aConsultorio.getId() <= 0) {
+            throw new InvalidDataException("Invalid ID");
+        }
+        if (aConsultorio.getNombre() == null || aConsultorio.getNombre().trim().equals("")) {
+            throw new InvalidDataException("El nombre del consultorio es obligatorio");
+        }
+        if (!nombreValido(aConsultorio.getNombre())) {
+           throw new InvalidDataException("El nombre del consultorio contiene caracteres inválidos");
+        }
+        if (aConsultorio.getNumero() <= 0) {
+            throw new InvalidDataException("El numero del consultorio no es valido");
+        }
+    }
+
+    private void validateConsultoriosRepetidos(
+        List<Consultorio> someConsultoriosFromCenterDTO,
+        List<Consultorio> someConsultoriosFromDbCenter
+    ) {
+        for (Consultorio consultorioFromDTO: someConsultoriosFromCenterDTO) {
+            boolean numeroDuplicado = someConsultoriosFromDbCenter.stream().anyMatch(consultorioFromDb ->
+                consultorioFromDb.getNumero().equals(consultorioFromDTO.getNumero())
+                &&
+                consultorioFromDb.getId() != consultorioFromDTO.getId()
+            );
+            if (numeroDuplicado) {
+                throw new ConflictException("El número de consultorio ya está registrado");
+            }
+
+            boolean nombreDuplicado = someConsultoriosFromDbCenter.stream().anyMatch(consultorioFromDb ->
+                consultorioFromDb.getNombre().equalsIgnoreCase(consultorioFromDTO.getNombre())
+                &&
+                consultorioFromDb.getId() != consultorioFromDTO.getId()
+            );
+            if (nombreDuplicado) {
+                throw new ConflictException("El nombre del consultorio ya está registrado");
+            }
+        }
+    }
+
+    private boolean nombreValido(String nombre) {
+        return nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$");
+    }
+    //  Consultorio #Especial  | 409         | El nombre del consultorio contiene caracteres no permitidos |
 }
