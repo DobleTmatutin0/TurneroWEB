@@ -1,7 +1,10 @@
 package unpsjb.labprog.backend.dto;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
+import unpsjb.labprog.backend.model.Consultorio;
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -17,5 +20,6 @@ public class CentroDeAtencion_DTO {
     private String localidad;
     private String telefono;
     private Coordenadas_DTO coordenadas;
+    private  List<Consultorio> consultorios;
 
 }
